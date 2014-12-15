@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html><!--HTML5 doctype-->
+<head>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta http-equiv="Pragma" content="no-cache">
+
+<script src="intelxdk.js"></script>
+<!-- phantom library, needed for XDK api calls -->
+<script src="cordova.js"></script>
+<!-- phantom library, needed for Cordova api calls -->
+<script src="xhr.js"></script>
+<!-- phantom library, needed for XDK CORS -->
+<script type="text/javascript" language="javascript">
+    var onDeviceReady = function () {                 // called when Cordova is ready
+      if (window.Cordova && navigator.splashscreen) { // Cordova API detected
+        navigator.splashscreen.hide();                // hide splash screen
+      }
+      setTimeout(function () {
+        $.ui.launch();
+      }, 50);
+    };
+    document.addEventListener("deviceready", onDeviceReady, false);
+</script>
+<script src="js/appframework.ui.min.js"></script>
+<script src="js/java.js"></script>
+<script>
+    $.ui.autoLaunch = false;
+    $.ui.useOSThemes = false; //Change this to false to force a device theme
+    $.ui.blockPageScroll();
+    $(document).ready(function () {
+      if ($.ui.useOSThemes && (!$.os.ios || $.os.ios7))
+        $("#afui").removeClass("ios");
+		crearTablaConfiguraciones();
+    });
+</script>
+<script  type="text/javascript" src="js/index.js"></script>
+
+<link href="css/icons.css" rel="stylesheet" type="text/css">
+<link href="css/af.ui.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<input type="hidden" id="usrCodigo" value="" />
+<div id="afui" class="ios7">
+    <div id="header" s="" class="header"></div>
+    <div id="content" style="">
+        <div class="panel" title="Log In" data-nav="nav_0" id="logIn" selected="selected"
+        style="" data-appbuilder-object="page" data-footer="footerLogIn" data-header="headerLogIn">
+
+            <form style="width: 100%; min-height: 50px; position: absolute; bottom: 0px;" data-appbuilder-object="form"
+            class="">
+                <div class="input_element form_element" style="width: 100%; overflow: hidden;"
+                data-appbuilder-object="input">
+                    <input type="text" style="float:left;" id="usrLogIn" placeholder="Usuario">
+                </div>
+                <div class="input_element form_element" style="width: 100%; overflow: hidden;"
+                data-appbuilder-object="input">
+                    <input type="text" style="float:left;" id="pswLogIn" placeholder="Contraseña">
+                </div>
+            </form>
+            <h1 class="icon key" style="font-size: 600%; text-align: center; top: 160.25px; position: fixed; width: 100%; display: none;"></h1>
+        </div>
+		<div class="panel" title="Configuraciones" data-nav="nav_0" id="configuraciones" style="" data-appbuilder-object="page" data-footer="footerConfiguraciones" data-header="headerConfiguraciones">
+			<div style="margin-top:10px;">
+				<input type="text" id="confSrv" class="confString" placeholder="Servidor" />
+				<input type="text" id="confInstancia" class="confString" placeholder="Instancia" />
+				<input type="text" id="confDb" class="confString" placeholder="Base de Datos" />
+				<input type="text" id="confUsr" class="confString" placeholder="Usuario" />
+				<input type="text" id="confPsw" class="confString" placeholder="Contraseña" />
+			</div>
+		</div>
+        <div class="panel" title="Principal" data-nav="nav_0" id="principal" data-appbuilder-object="page"
+        style="" data-footer="footerPrincipal" data-header="headerPrincipal">
+			<h4 id="usrNombre" class="icon user" style="text-align:center;margin-top:10px;"></h4>
+            <div id="deviceready" class="blink">
+                <p class="event listening">Conectando</p>
+                <p class="event received">Dispositivo Listo</p>
+            </div>
+            <a class="button" href="#" style="width: 100%;" data-appbuilder-object="button"
+            data-transition="slide" id="scan">Escanear</a>
+
+            <div class="container" style="width: 100%; height:30px;" data-appbuilder-object="container"></div>
+            <h4>Ingresar Manualmente</h4>
+            <div class="input_element form_element" style="width:100%;overflow:hidden;" data-appbuilder-object="input">
+                <input type="number" style="float:left;" id="codigoManual" placeholder="Código">
+            </div>
+            <a class="button" style="width: 100%;" data-appbuilder-object="button"
+            data-transition="slide" id="btnBuscar" onclick="buscarCodigo($('#codigoManual').val())">Buscar</a>
+        </div>
+    </div>
+    <div id="navbar" class="footer">
+        <footer id="defaultFooter"><a class="icon home">Home</a>
+        </footer>
+    </div>
+    <!-- <div id="navbar" class="footer">
+        <footer><a href="#principal" class="icon key" style="">Entrar</a>
+        </footer>
+    </div>-->
+    <header id="headerLogIn" data-appbuilder-object="header">
+        <h1 class="">Log In</h1>
+		<a href="#configuraciones" class="button icon settings" style="float:right"></a>
+    </header>
+    <nav id="nav_0" data-appbuilder-object="nav">
+        <h1>Menú</h1>
+    </nav>
+    <footer id="footerLogIn" data-appbuilder-object="footer">
+		<a class="icon key" onclick="logIn()">Entrar</a>
+    </footer>
+	
+	<header id="headerConfiguraciones" data-appbuilder-object="header">
+		<a class="button backButton">Volver</a>
+		<h1>Configuraciones</h1>
+    </header>
+	<footer id="footerConfiguraciones" data-appbuilder-object="footer">
+		<a href="#logIn" class="icon close">Cancelar</a>
+		<a href="#logIn" class="icon check" onclick="guardarConfiguraciones();">Guardar</a>
+    </footer>
+	
+	
+    <header id="header_1" data-appbuilder-object="header"> <a id="backButton" href="#" class="button">Back</a>
+        <h1 class="">Custom Title</h1> 
+    </header>
+    <footer id="footerPrincipal" data-appbuilder-object="footer"><a href="#logIn" class="icon close">Cerrar Sesión</a>
+    </footer>
+    <header id="headerPrincipal" data-appbuilder-object="header">
+        <h1 class="">Scanner</h1>
+    </header>
+</div>
+<!-- <style class="noload" type="text/javascript" data-s="cordova.js"></style> -->
+<script  type="text/javascript" data-s="barcodescanner.js"></script>
+<script  type="text/javascript" data-s="childbrowser.js"></script>
+
+<script  type="text/javascript">
+    app.initialize();
+</script>
+</body>
+
+
+</html>
